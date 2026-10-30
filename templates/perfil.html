@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>👤 O Meu Perfil</h1>
+
+<div class="perfil-grid">
+
+    <!-- Informações -->
+    <div class="card perfil-info">
+        <h2>Informações da Conta</h2>
+        <table class="info-table">
+            <tr><th>Utilizador</th><td>{{ current_user.username }}</td></tr>
+            <tr><th>Email</th><td>{{ current_user.email }}</td></tr>
+            <tr><th>Região</th><td>{{ current_user.regiao }}</td></tr>
+            <tr>
+                <th>Membro desde</th>
+                <td>
+                    {% if current_user.created_at is not none %}
+                        {{ current_user.created_at.strftime('%d/%m/%Y') }}
+                    {% else %}
+                        Hoje
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="card perfil-stats">
+        <h2>As Minhas Estatísticas</h2>
+        <div class="stat-item">
+            <span class="stat-label">💰 Total Investido</span>
+            <span class="stat-value">{{ formatar_moeda(current_user.total_investido, current_user.regiao) }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">🏢 Entidades</span>
+            <span class="stat-value">{{ current_user.num_entidades }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">📈 Investimentos</span>
+            <span class="stat-value">{{ current_user.num_investimentos }}</span>
+        </div>
+    </div>
+
+    <!-- Editar Dados -->
+    <div class="card">
+        <h2>✏️ Editar Dados</h2>
+        <form method="POST">
+            <input type="hidden" name="acao" value="editar_dados">
+            <label>Utilizador</label>
+            <input type="text" name="username" value="{{ current_user.username }}" required>
+            <label>Email</label>
+            <input type="email" name="email" value="{{ current_user.email }}" required>
+            <label>Região</label>
+            <select name="regiao">
+                <option value="PT" {% if current_user.regiao == 'PT' %}selected{% endif %}>🇵🇹 Portugal (€)</option>
+                <option value="BR" {% if current_user.regiao == 'BR' %}selected{% endif %}>🇧🇷 Brasil (R$)</option>
+                <option value="US" {% if current_user.regiao == 'US' %}selected{% endif %}>🇺🇸 EUA ($)</option>
+                <option value="AO" {% if current_user.regiao == 'AO' %}selected{% endif %}>🇦🇴 Angola (Kz)</option>
+                <option value="MZ" {% if current_user.regiao == 'MZ' %}selected{% endif %}>🇲🇿 Moçambique (MT)</option>
+            </select>
+            <button type="submit">💾 Guardar Alterações</button>
+        </form>
+    </div>
+
+    <!-- Mudar Senha -->
+    <div class="card">
+        <h2>🔒 Mudar Palavra-passe</h2>
+        <form method="POST">
+            <input type="hidden" name="acao" value="mudar_senha">
+            <label>Palavra-passe Atual</label>
+            <input type="password" name="senha_atual" required>
+            <label>Nova Palavra-passe</label>
+            <input type="password" name="nova_senha" required minlength="4">
+            <label>Confirmar Nova Palavra-passe</label>
+            <input type="password" name="confirmar_senha" required minlength="4">
+            <button type="submit" class="btn-warning">🔑 Alterar Palavra-passe</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

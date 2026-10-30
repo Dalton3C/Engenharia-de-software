@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-container">
+    <h2>📝 Criar Conta</h2>
+    <form method="POST">
+        <label>Utilizador</label>
+        <input type="text" name="username" required>
+        <label>Email</label>
+        <input type="email" name="email" required>
+        <label>Palavra-passe</label>
+        <input type="password" name="password" required minlength="4">
+        <label>Região (formatação de moeda)</label>
+        <select name="regiao">
+            <option value="PT">🇵🇹 Portugal (€)</option>
+            <option value="BR">🇧🇷 Brasil (R$)</option>
+            <option value="US">🇺🇸 EUA ($)</option>
+            <option value="AO">🇦🇴 Angola (Kz)</option>
+            <option value="MZ">🇲🇿 Moçambique (MT)</option>
+        </select>
+        <button type="submit">Registar</button>
+    </form>
+    <p>Já tem conta? <a href="{{ url_for('login') }}">Entrar</a></p>
+</div>
+{% endblock %}

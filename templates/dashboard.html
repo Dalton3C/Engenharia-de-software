@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="cards">
+    <div class="card">
+        <h3>💰 Total Investido</h3>
+        <p class="big">{{ formatar_moeda(current_user.total_investido, current_user.regiao) }}</p>
+    </div>
+    <div class="card">
+        <h3>🏢 Entidades</h3>
+        <p class="big">{{ current_user.num_entidades }}</p>
+    </div>
+    <div class="card">
+        <h3>📈 Investimentos</h3>
+        <p class="big">{{ current_user.num_investimentos }}</p>
+    </div>
+</div>
+
+<h2>Últimos Investimentos</h2>
+{% if recentes %}
+<table>
+    <tr><th>Data</th><th>Entidade</th><th>Valor</th><th>Descrição</th></tr>
+    {% for inv in recentes %}
+    <tr>
+        <td>{{ inv.data.strftime('%d/%m/%Y') }}</td>
+        <td>{{ inv.entidade.nome }}</td>
+        <td>{{ formatar_moeda(inv.valor, current_user.regiao) }}</td>
+        <td>{{ inv.descricao or '—' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Nenhum investimento registado ainda. <a href="{{ url_for('investimentos') }}">Começar →</a></p>
+{% endif %}
+{% endblock %}

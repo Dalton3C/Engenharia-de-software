@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>📈 Investimentos</h1>
+
+<div class="form-section">
+    <h3>Registar Investimento</h3>
+    <form method="POST" class="inline-form">
+        <select name="entidade_id" required>
+            <option value="">-- Entidade --</option>
+            {% for e in entidades %}
+            <option value="{{ e.id }}">{{ e.nome }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="valor" step="0.01" min="0.01" placeholder="Valor" required>
+        <input type="date" name="data" value="{{ now().strftime('%Y-%m-%d') }}">
+        <input type="text" name="descricao" placeholder="Descrição (opcional)">
+        <button type="submit">+ Registar</button>
+    </form>
+</div>
+
+<a href="{{ url_for('exportar_investimentos') }}" class="btn-secondary">📥 Exportar tudo (.txt)</a>
+
+{% if investimentos %}
+<table>
+    <tr><th>Data</th><th>Entidade</th><th>Valor</th><th>Descrição</th></tr>
+    {% for inv in investimentos %}
+    <tr>
+        <td>{{ inv.data.strftime('%d/%m/%Y') }}</td>
+        <td>{{ inv.entidade.nome }}</td>
+        <td>{{ formatar_moeda(inv.valor, current_user.regiao) }}</td>
+        <td>{{ inv.descricao or '—' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Nenhum investimento registado.</p>
+{% endif %}
+{% endblock %}

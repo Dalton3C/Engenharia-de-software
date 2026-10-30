@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>📋 Relatórios Programáveis</h1>
+
+<div class="form-section">
+    <h3>Configurar Relatório Automático</h3>
+    <form method="POST" class="inline-form">
+        <label>Intervalo (dias):</label>
+        <input type="number" name="intervalo_dias" min="1" value="{{ config.intervalo_dias if config else 30 }}" required>
+        <label>Formato:</label>
+        <select name="formato">
+            <option value="pdf" {{ 'selected' if config and config.formato == 'pdf' }}>PDF</option>
+            <option value="txt" {{ 'selected' if config and config.formato == 'txt' }}>TXT</option>
+        </select>
+        <button type="submit">💾 Guardar Configuração</button>
+    </form>
+</div>
+
+{% if config %}
+<div class="card" style="margin-top:20px">
+    <h3>Configuração Atual</h3>
+    <p>📅 Intervalo: <strong>a cada {{ config.intervalo_dias }} dias</strong></p>
+    <p>📄 Formato: <strong>.{{ config.formato }}</strong></p>
+    <p>✅ Estado: <strong>{{ 'Ativo' if config.ativo else 'Inativo' }}</strong></p>
+    <a href="{{ url_for('gerar_relatorio') }}" class="btn-primary" style="margin-top:10px">
+        ⚡ Gerar Relatório Agora
+    </a>
+</div>
+{% endif %}
+{% endblock %}

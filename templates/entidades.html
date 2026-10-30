@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>🏢 Entidades</h1>
+
+<form method="GET" class="search-form">
+    <input type="text" name="q" placeholder="Pesquisar entidade..." value="{{ pesquisa }}">
+    <button type="submit">🔍 Pesquisar</button>
+    {% if pesquisa %}<a href="{{ url_for('entidades') }}" class="btn-secondary">Limpar</a>{% endif %}
+</form>
+
+<div class="form-section">
+    <h3>Adicionar Entidade</h3>
+    <form method="POST" class="inline-form">
+        <input type="text" name="nome" placeholder="Nome" required>
+        <select name="tipo">
+            <option>Empresa</option>
+            <option>Fundo</option>
+            <option>Estado</option>
+            <option>Particular</option>
+            <option>Outro</option>
+        </select>
+        <input type="text" name="contacto" placeholder="Contacto (opcional)">
+        <button type="submit">+ Adicionar</button>
+    </form>
+</div>
+
+{% if entidades %}
+<table>
+    <tr><th>Nome</th><th>Tipo</th><th>Contacto</th><th>Ações</th></tr>
+    {% for e in entidades %}
+    <tr>
+        <td>{{ e.nome }}</td>
+        <td>{{ e.tipo }}</td>
+        <td>{{ e.contacto or '—' }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('delete_entidade', eid=e.id) }}" style="display:inline">
+                <button type="submit" class="btn-danger" onclick="return confirm('Remover?')">🗑</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Nenhuma entidade encontrada.</p>
+{% endif %}
+{% endblock %}
